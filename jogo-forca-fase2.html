@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forca - Fase 2</title>
+  <style>
+    body { font-family: Arial; text-align: center; background: #f3e5f5; padding: 20px; }
+    #palavra { font-size: 2rem; letter-spacing: 10px; margin: 20px; }
+    .letra { padding: 10px; margin: 5px; font-size: 1.2rem; background: #8e44ad; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+    .letra:disabled { background: #ccc; }
+    #mensagem { margin-top: 20px; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+  <h1>🔤 Jogo da Forca - Fase 2</h1>
+  <div id="palavra"></div>
+  <div id="letras"></div>
+  <div id="mensagem"></div>
+  <button onclick="window.location.href='forca_fases.html'">⬅️ Voltar</button>
+
+  <script>
+    const palavras = ['FADA', 'PEIXE', 'CASA'];
+    let palavra = palavras[Math.floor(Math.random() * palavras.length)];
+    let exibida = Array(palavra.length).fill('_');
+    let tentativas = 6;
+
+    const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const letrasDiv = document.getElementById('letras');
+
+    function atualizar() {
+      document.getElementById('palavra').innerText = exibida.join(' ');
+      if (!exibida.includes('_')) {
+        document.getElementById('mensagem').innerText = '🎉 Você venceu!';
+        salvarProgresso();
+        desativarBotoes();
+      } else if (tentativas === 0) {
+        document.getElementById('mensagem').innerText = '😢 Fim de jogo! A palavra era ' + palavra;
+        desativarBotoes();
+      }
+    }
+
+    function desativarBotoes() {
+      document.querySelectorAll('.letra').forEach(btn => btn.disabled = true);
+    }
+
+    function salvarProgresso() {
+      const atual = parseInt(localStorage.getItem('progressoForca') || '1');
+      if (3 > atual) localStorage.setItem('progressoForca', '3');
+    }
+
+    letras.forEach(l => {
+      const btn = document.createElement('button');
+      btn.innerText = l;
+      btn.className = 'letra';
+      btn.onclick = () => {
+        btn.disabled = true;
+        if (palavra.includes(l)) {
+          for (let j = 0; j < palavra.length; j++) {
+            if (palavra[j] === l) exibida[j] = l;
+          }
+        } else {
+          tentativas--;
+        }
+        atualizar();
+      };
+      letrasDiv.appendChild(btn);
+    });
+
+    atualizar();
+  </script>
+</body>
+</html>

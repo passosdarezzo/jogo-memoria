@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Montar Palavra - Fase 2</title>
+  <style>
+    body { font-family: Arial; background: #fefae0; text-align: center; padding: 20px; }
+    .letra, .espaco { display: inline-block; font-size: 2rem; padding: 10px 20px; margin: 5px; border: 2px dashed #555; min-width: 40px; }
+    .letra { background: #d4a373; color: white; cursor: grab; }
+    .espaco { background: #fff; }
+    #mensagem { margin-top: 20px; font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+  <h1>🧩 Montar a Palavra - Fase 2</h1>
+  <div id="espacos"></div>
+  <hr>
+  <div id="letras"></div>
+  <div id="mensagem"></div>
+  <button onclick="window.location.href='montar_fases.html'">⬅️ Voltar</button>
+
+  <script>
+    const palavra = "LUA";
+    const letras = "AUL".split('');
+
+    const espacosDiv = document.getElementById('espacos');
+    const letrasDiv = document.getElementById('letras');
+
+    palavra.split('').forEach((_, i) => {
+      const box = document.createElement('div');
+      box.className = 'espaco';
+      box.dataset.index = i;
+      espacosDiv.appendChild(box);
+    });
+
+    letras.forEach(l => {
+      const div = document.createElement('div');
+      div.className = 'letra';
+      div.draggable = true;
+      div.innerText = l;
+      letrasDiv.appendChild(div);
+    });
+
+    document.querySelectorAll('.letra').forEach(el => {
+      el.addEventListener('dragstart', e => { e.dataTransfer.setData('text', e.target.innerText); });
+    });
+
+    document.querySelectorAll('.espaco').forEach(el => {
+      el.addEventListener('dragover', e => e.preventDefault());
+      el.addEventListener('drop', e => {
+        e.preventDefault();
+        const letra = e.dataTransfer.getData('text');
+        el.innerText = letra;
+        verificar();
+      });
+    });
+
+    function verificar() {
+      const atual = Array.from(document.querySelectorAll('.espaco')).map(e => e.innerText).join('');
+      if (atual === palavra) {
+        document.getElementById('mensagem').innerText = '🎉 Parabéns!';
+        salvarProgresso();
+      }
+    }
+
+    function salvarProgresso() {
+      const atual = parseInt(localStorage.getItem('progressoMontar') || '1');
+      if (3 > atual) localStorage.setItem('progressoMontar', '3');
+    }
+  </script>
+</body>
+</html>

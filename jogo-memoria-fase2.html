@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memória - Fase 2</title>
+  <style>
+    body { font-family: Arial; background: #d0f4ff; text-align: center; padding: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; max-width: 400px; margin: auto; }
+    .card { background: #00b894; color: white; font-size: 2rem; padding: 20px; border-radius: 10px; cursor: pointer; }
+    .matched { background: #aaa; cursor: default; }
+  </style>
+</head>
+<body>
+  <h1>🧠 Jogo da Memória - Fase 2</h1>
+  <div class="grid" id="tabuleiro"></div>
+  <div id="mensagem"></div>
+  <button onclick="window.location.href='memoria_fases.html'">⬅️ Voltar</button>
+
+  <script>
+    let cartas = ['🐶', '🐱', '🐸', '🐟', '🦊', '🦁', '🐶', '🐱', '🐸', '🐟', '🦊', '🦁'];
+    cartas = cartas.sort(() => 0.5 - Math.random());
+
+    let primeiro = null;
+    let bloqueado = false;
+    let acertos = 0;
+    const total = 6;
+
+    const tabuleiro = document.getElementById('tabuleiro');
+    cartas.forEach((valor, i) => {
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerText = '?';
+      div.onclick = () => revelar(i, valor, div);
+      tabuleiro.appendChild(div);
+    });
+
+    function revelar(i, valor, el) {
+      if (bloqueado || el.classList.contains('matched') || el.innerText !== '?') return;
+      el.innerText = valor;
+      if (!primeiro) {
+        primeiro = { i, valor, el };
+      } else {
+        bloqueado = true;
+        setTimeout(() => {
+          if (primeiro.valor === valor) {
+            el.classList.add('matched');
+            primeiro.el.classList.add('matched');
+            acertos++;
+            if (acertos === total) {
+              document.getElementById('mensagem').innerText = '🎉 Você completou!';
+              salvarProgresso();
+            }
+          } else {
+            el.innerText = '?';
+            primeiro.el.innerText = '?';
+          }
+          primeiro = null;
+          bloqueado = false;
+        }, 800);
+      }
+    }
+
+    function salvarProgresso() {
+      const atual = parseInt(localStorage.getItem('progressoMemoria') || '1');
+      if (3 > atual) localStorage.setItem('progressoMemoria', '3');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alfabetiza Kids</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #a3d5f7, #d0f0c0);
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h1 {
+      font-size: 3rem;
+      color: #2d3436;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #636e72;
+      padding: 0 20px;
+      max-width: 800px;
+    }
+    .main-button, .game-button {
+      background: #55efc4;
+      color: #2d3436;
+      padding: 15px 50px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      margin: 10px;
+      width: 300px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s;
+    }
+    .main-button:hover, .game-button:hover {
+      background: #81ecec;
+    }
+  </style>
+</head>
+<body>
+  <!-- Tela Inicial -->
+  <div class="container" id="telaInicial">
+    <h1>Alfabetiza Kids</h1>
+    <div class="subtitle">
+      Desenvolvido por<br>
+      Deisiane Santana Morely - RA: 2025102019<br>
+      Juliana Pereira da Silva - RA: 2025109250<br>
+      Isabelly Aparecida de Paula Araujo - RA: 2025116190<br>
+      Mariana dos Santos - RA: 2025113984
+    </div>
+    <button class="main-button" onclick="mostrarTelaJogos()">Escolher Jogo</button>
+  </div>
+
+  <!-- Página de Jogos -->
+  <div class="container" id="telaJogos" style="display: none;">
+    <h1>Escolha um Jogo</h1>
+    <button class="game-button" onclick="abrirMapaFases('memoria')">🧠 Jogo da Memória</button>
+    <button class="game-button" onclick="abrirMapaFases('forca')">🔤 Jogo da Forca</button>
+    <button class="game-button" onclick="abrirMapaFases('montar')">🧩 Montar a Palavra</button>
+    <button class="main-button" onclick="voltarTelaInicial()">Voltar</button>
+  </div>
+
+  <script>
+    function mostrarTelaJogos() {
+      document.getElementById("telaInicial").style.display = "none";
+      document.getElementById("telaJogos").style.display = "flex";
+    }
+
+    function voltarTelaInicial() {
+      document.getElementById("telaInicial").style.display = "flex";
+      document.getElementById("telaJogos").style.display = "none";
+    }
+
+    function abrirMapaFases(jogo) {
+      window.location.href = `${jogo}_fases.html`;
+    }
+  </script>
+</body>
+</html>
